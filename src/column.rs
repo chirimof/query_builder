@@ -1,9 +1,6 @@
 use ::prelude::*;
 use ::conditions::*;
 
-use std::borrow::Cow;
-
-
 
 pub trait Column: AsSqlParts
     where Self: Sized
@@ -50,6 +47,7 @@ pub trait Column: AsSqlParts
 mod simple_test {
     use super::*;
     use self::UserColumn::*;
+    use std::borrow::Cow;
 
     enum UserColumn {
         Id,
@@ -134,6 +132,7 @@ mod simple_test {
 #[cfg(test)]
 mod complex_test {
     use super::*;
+    use std::borrow::Cow;
 
     use self::UserColumn::*;
 
