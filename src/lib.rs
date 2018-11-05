@@ -8,6 +8,13 @@ pub mod prelude {
     pub use super::column::Column;
 }
 
+fn multiple_placeholder(len: usize) -> String {
+    (0..len)
+        .map(|_| "?")
+        .collect::<Vec<&str>>()
+        .join(", ")
+}
+
 
 #[cfg(test)]
 mod tests {

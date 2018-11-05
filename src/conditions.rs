@@ -1,7 +1,7 @@
 use ::prelude::*;
+use ::multiple_placeholder;
 
 use std::borrow::Cow;
-
 
 
 pub trait Condition: AsSqlParts
@@ -53,7 +53,6 @@ impl<Col> AsSqlParts for Equal<Col>
         format!("{} = ?", self.column.as_sql_parts()).into()
     }
 }
-
 
 pub struct NotEq<Col>
 {
@@ -222,13 +221,6 @@ impl<Col> Included<Col>
 impl<Col> Condition for Included<Col>
     where Col: Column
 {
-}
-
-fn multiple_placeholder(len: usize) -> String {
-    (0..len)
-        .map(|_| "?")
-        .collect::<Vec<&str>>()
-        .join(", ")
 }
 
 impl<Col> AsSqlParts for Included<Col>
