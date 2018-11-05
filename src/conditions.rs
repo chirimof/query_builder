@@ -15,6 +15,14 @@ pub trait Condition: AsSqlParts
         Or::new(self, cond)
     }
 
+    fn and_not<Cond: Condition> (self, cond: Cond) -> AndNot<Self, Cond> {
+        AndNot::new(self, cond)
+    }
+
+    fn or_not<Cond: Condition> (self, cond: Cond) -> OrNot<Self, Cond> {
+        OrNot::new(self, cond)
+    }
+
     fn priority(self) -> Priority<Self> {
         Priority::new(self)
     }
@@ -174,122 +182,6 @@ impl<Col> AsSqlParts for LessEq<Col>
     }
 }
 
-pub struct And<L, R>
-{
-    left: L,
-    right: R,
-}
-
-impl<L, R> And<L, R>
-    where
-        L: Condition,
-        R: Condition,
-{
-    fn new(left: L, right: R) -> Self {
-        And { left, right }
-    }
-}
-
-impl<L, R> Condition for And<L, R>
-    where
-        L: Condition,
-        R: Condition
-{
-}
-
-impl<L, R> AsSqlParts for And<L, R>
-    where
-        L: Condition,
-        R: Condition
-{
-    fn as_sql_parts<'a> (&self) -> Cow<'a, str> {
-        format!("{} AND {}", self.left.as_sql_parts(), self.right.as_sql_parts()).into()
-    }
-}
-
-
-pub struct Or<L, R>
-{
-    left: L,
-    right: R,
-}
-
-impl<L, R> Or<L, R>
-    where
-        L: Condition,
-        R: Condition
-{
-    pub fn new(left: L, right: R) -> Self {
-        Or { left, right }
-    }
-}
-
-impl<L, R> Condition for Or<L, R>
-    where
-        L: Condition,
-        R: Condition
-{
-}
-
-impl<L, R> AsSqlParts for Or<L, R>
-    where
-        L: Condition,
-        R: Condition
-{
-    fn as_sql_parts<'a> (&self) -> Cow<'a, str> {
-        format!("{} OR {}", self.left.as_sql_parts(), self.right.as_sql_parts()).into()
-    }
-}
-
-pub struct AndNot<Cond> {
-    column: Cond
-}
-
-impl<Cond> AndNot<Cond>
-    where Cond: Condition
-{
-    pub fn new(column: Cond) -> Self {
-        AndNot { column }
-    }
-}
-
-impl<Cond> Condition for AndNot<Cond>
-    where Cond: Condition
-{}
-
-impl<Cond> AsSqlParts for AndNot<Cond>
-    where Cond: Condition
-{
-    fn as_sql_parts<'a> (&self) -> Cow<'a, str> {
-        format!("AND NOT ( {} )", self.column.as_sql_parts()).into()
-    }
-}
-
-pub struct OrNot<Cond> {
-    column: Cond
-}
-
-impl<Cond> OrNot<Cond>
-    where Cond: Condition
-{
-    pub fn new(column: Cond) -> Self {
-        OrNot { column }
-    }
-}
-
-impl<Cond> Condition for OrNot<Cond>
-    where Cond: Condition
-{}
-
-impl<Cond> AsSqlParts for OrNot<Cond>
-    where Cond: Condition
-{
-    fn as_sql_parts<'a> (&self) -> Cow<'a, str> {
-        format!("OR NOT ( {} )", self.column.as_sql_parts()).into()
-    }
-}
-
-
 pub struct Between<Col> {
     column: Col
 }
@@ -369,6 +261,135 @@ impl<Col> AsSqlParts for Like<Col>
 {
     fn as_sql_parts<'a> (&self) -> Cow<'a, str> {
         format!("{} LIKE ?", self.column.as_sql_parts()).into()
+    }
+}
+
+// Wrap two Condition ==========
+pub struct And<L, R>
+{
+    left: L,
+    right: R,
+}
+
+impl<L, R> And<L, R>
+    where
+        L: Condition,
+        R: Condition,
+{
+    fn new(left: L, right: R) -> Self {
+        And { left, right }
+    }
+}
+
+impl<L, R> Condition for And<L, R>
+    where
+        L: Condition,
+        R: Condition
+{
+}
+
+impl<L, R> AsSqlParts for And<L, R>
+    where
+        L: Condition,
+        R: Condition
+{
+    fn as_sql_parts<'a> (&self) -> Cow<'a, str> {
+        format!("{} AND {}", self.left.as_sql_parts(), self.right.as_sql_parts()).into()
+    }
+}
+
+pub struct Or<L, R>
+{
+    left: L,
+    right: R,
+}
+
+impl<L, R> Or<L, R>
+    where
+        L: Condition,
+        R: Condition
+{
+    pub fn new(left: L, right: R) -> Self {
+        Or { left, right }
+    }
+}
+
+impl<L, R> Condition for Or<L, R>
+    where
+        L: Condition,
+        R: Condition
+{
+}
+
+impl<L, R> AsSqlParts for Or<L, R>
+    where
+        L: Condition,
+        R: Condition
+{
+    fn as_sql_parts<'a> (&self) -> Cow<'a, str> {
+        format!("{} OR {}", self.left.as_sql_parts(), self.right.as_sql_parts()).into()
+    }
+}
+
+pub struct AndNot<L, R> {
+    left: L,
+    right: R,
+}
+
+impl<L, R> AndNot<L, R>
+    where
+        L: Condition,
+        R: Condition
+{
+    pub fn new(left: L, right: R) -> Self {
+        AndNot { left, right }
+    }
+}
+
+impl<L, R> Condition for AndNot<L, R>
+    where
+        L: Condition,
+        R: Condition
+{}
+
+impl<L, R> AsSqlParts for AndNot<L, R>
+    where
+        L: Condition,
+        R: Condition
+{
+    fn as_sql_parts<'a> (&self) -> Cow<'a, str> {
+        format!("{} AND NOT ( {} )", self.left.as_sql_parts(), self.right.as_sql_parts()).into()
+    }
+}
+
+pub struct OrNot<L, R> {
+    left: L,
+    right: R,
+}
+
+impl<L, R> OrNot<L, R>
+    where
+        L: Condition,
+        R: Condition
+{
+    pub fn new(left: L, right: R) -> Self {
+        OrNot { left, right }
+    }
+}
+
+impl<L, R> Condition for OrNot<L, R>
+    where
+        L: Condition,
+        R: Condition
+{}
+
+impl<L, R> AsSqlParts for OrNot<L, R>
+    where
+        L: Condition,
+        R: Condition
+{
+    fn as_sql_parts<'a> (&self) -> Cow<'a, str> {
+        format!("{} OR NOT ( {} )", self.left.as_sql_parts(), self.right.as_sql_parts()).into()
     }
 }
 
