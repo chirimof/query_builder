@@ -7,8 +7,11 @@ pub mod manipulations;
 pub mod prelude {
     pub use super::as_sql::AsSqlParts;
     pub use super::column::Column;
-    pub use super::manipulations::{Select, Selected, Insert, Update, Delete};
-    pub use super::table::{Table};
+    pub use super::manipulations::{
+        select::Select,
+        Insert, Update, Delete
+    };
+    pub use super::table::{Table, Columns};
 }
 
 fn multiple_placeholder(len: usize) -> String {
