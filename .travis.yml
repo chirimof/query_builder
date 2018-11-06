@@ -1,1 +1,4 @@
 language: Rust
+
+script:
+  cargo test
