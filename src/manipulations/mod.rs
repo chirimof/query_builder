@@ -20,7 +20,15 @@ pub trait Manipulate: AsSqlParts
     {
         let join_type = JoinType::InnerJoin;
         let cond = JoinCondition::new(table, left, right);
-        Join::new(self,cond, join_type)
+        Join::new(self, cond, join_type)
+    }
+
+    fn left_outer<JT: Table, L: Column, R: Column> (self, table: JT, left: L, right: R)
+        -> Join<Self, JT, L, R>
+    {
+        let join_type = JoinType::LeftOuter;
+        let cond = JoinCondition::new(table, left, right);
+        Join::new(self, cond, join_type)
     }
 }
 

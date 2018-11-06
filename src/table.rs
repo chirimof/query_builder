@@ -195,5 +195,14 @@ mod manipulate_test {
             .inner_join(CategoryTable, CategoryPostId, PostId);
         assert_eq!(parts.as_sql_parts(), expected);
 
+        // Use left outer join
+        let expected = "SELECT users.id, users.age FROM users \
+        LEFT OUTER JOIN posts ON posts.author_id = users.id \
+        INNER JOIN categories ON categories.post_id = posts.id";
+
+        let parts = UserTable.select(UserColumns::new())
+            .left_outer(PostTable, PostAuthorId, UserId)
+            .inner_join(CategoryTable, CategoryPostId, PostId);
+        assert_eq!(parts.as_sql_parts(), expected);
     }
 }
