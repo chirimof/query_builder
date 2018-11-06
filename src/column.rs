@@ -132,28 +132,14 @@ mod simple_test {
 #[cfg(test)]
 mod complex_test {
     use super::*;
-    use std::borrow::Cow;
 
-    use self::UserColumn::*;
+    setup_table!({
+        namespace: users,
+        columns: [{id: Id, name: Name, email: Email, admin: Admin}],
+        primary: Id
+    });
 
-    enum UserColumn {
-        Id,
-        Name,
-        Email,
-        Admin,
-    }
-    impl Column for UserColumn {}
-
-    impl AsSqlParts for UserColumn {
-        fn as_sql_parts<'a> (&self) -> Cow<'a, str> {
-            match self {
-                UserColumn::Id => "users.id".into(),
-                UserColumn::Name => "users.name".into(),
-                UserColumn::Email => "users.email".into(),
-                UserColumn::Admin => "users.admin".into()
-            }
-        }
-    }
+    use self::users::*;
 
     #[test]
     fn level_1_test() {
