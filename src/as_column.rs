@@ -1,5 +1,5 @@
-use ::prelude::*;
-use ::conditions::*;
+use super::dev::*;
+use super::conditions::*;
 
 
 pub trait AsColumn: AsSqlParts

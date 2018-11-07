@@ -1,5 +1,5 @@
-use ::prelude::*;
-use ::multiple_placeholder;
+use super::dev::*;
+use super::multiple_placeholder;
 
 use std::borrow::Cow;
 

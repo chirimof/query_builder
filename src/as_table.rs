@@ -1,4 +1,5 @@
-use ::prelude::*;
+use super::dev::*;
+use super::state::dev::Select;
 
 
 pub trait AsTable: AsSqlParts
@@ -14,12 +15,10 @@ pub trait AsTable: AsSqlParts
     fn primary_column(&self) -> Self::PrimaryColumn;
 }
 
-
-
 #[cfg(test)]
-mod manipulate_test {
+mod filter {
     use super::*;
-    use manipulations::Manipulate;
+    use ::adapters::dev::Filter;
 
     setup_table!({
         namespace: users,

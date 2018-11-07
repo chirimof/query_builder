@@ -1,6 +1,3 @@
-use super::prelude::*;
-
-
 macro_rules! setup_table {
     ( { namespace: $namespace:ident,
         columns: [ { $( $col_name:ident: $col_type:ident ),* } ],
@@ -57,7 +54,7 @@ macro_rules! setup_table {
 
 #[cfg(test)]
 mod macros_test {
-    use super::*;
+    use ::dev::*;
     setup_table!({
             namespace: users,
             columns: [ {id: Id, email: Email} ],

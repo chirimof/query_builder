@@ -1,4 +1,4 @@
-use super::prelude::{AsSqlParts, AsColumn};
+use super::dev::{AsSqlParts, AsColumn};
 
 
 pub trait AsColumns: AsSqlParts {

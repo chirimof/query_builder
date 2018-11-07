@@ -15,11 +15,9 @@ impl<T, C> Select<T, C>
     pub fn new(table: T, columns: C) -> Self {
         Select { table, columns }
     }
-
-
 }
 
-impl<T, C> Manipulate for Select<T, C>
+impl<T, C> Filter for Select<T, C>
     where
         T: AsTable,
         C: AsColumns
@@ -40,4 +38,5 @@ impl<T, C> Executable for Select<T, C>
     where
         T: AsTable,
         C: AsColumns
-{}
+{
+}

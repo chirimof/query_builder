@@ -1,19 +1,7 @@
-use super::prelude::*;
-use std::borrow::Cow;
+use super::*;
 
 
-pub mod select;
-pub mod join;
-
-use self::join::{Join, JoinType, JoinCondition};
-
-pub struct Insert;
-
-pub struct Update;
-
-pub struct Delete;
-
-pub trait Manipulate: AsSqlParts
+pub trait Filter: AsSqlParts
     where
         Self: Sized
 {
@@ -32,10 +20,8 @@ pub trait Manipulate: AsSqlParts
         let cond = JoinCondition::new(table, left, right);
         Join::new(self, cond, join_type)
     }
-}
 
-pub trait Executable: AsSqlParts {
-    fn finish<'a> (&self) -> Cow<'a, str> {
-        self.as_sql_parts()
+    fn use_where<C: Condition> (self, conditions: C) -> WhereState<Self, C> {
+        WhereState::new(self, conditions)
     }
 }

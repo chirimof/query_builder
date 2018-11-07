@@ -1,4 +1,6 @@
 use super::*;
+use std::borrow::Cow;
+
 
 pub struct Join<M, T, L, R> {
     manipulation: M,
@@ -8,7 +10,7 @@ pub struct Join<M, T, L, R> {
 
 impl<M, T, L, R> Join<M, T, L, R>
     where
-        M: Manipulate,
+        M: Filter,
         T: AsTable,
         L: AsColumn,
         R: AsColumn
@@ -18,9 +20,9 @@ impl<M, T, L, R> Join<M, T, L, R>
     }
 }
 
-impl<M, T, L, R> Manipulate for Join<M, T, L, R>
+impl<M, T, L, R> Filter for Join<M, T, L, R>
     where
-        M: Manipulate,
+        M: Filter,
         T: AsTable,
         L: AsColumn,
         R: AsColumn
@@ -29,7 +31,7 @@ impl<M, T, L, R> Manipulate for Join<M, T, L, R>
 
 impl<M, T, L, R> AsSqlParts for Join<M, T, L, R>
     where
-        M: Manipulate,
+        M: Filter,
         T: AsTable,
         L: AsColumn,
         R: AsColumn
@@ -39,6 +41,16 @@ impl<M, T, L, R> AsSqlParts for Join<M, T, L, R>
             self.manipulation.as_sql_parts(), self.join_type.as_sql_parts(), self.condition.as_sql_parts())
             .into()
     }
+}
+
+impl<M, T, L, R> Executable for Join<M, T, L, R>
+    where
+        M: Filter,
+        T: AsTable,
+        L: AsColumn,
+        R: AsColumn
+{
+    fn finish() {}
 }
 
 pub enum JoinType {
