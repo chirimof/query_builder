@@ -18,6 +18,6 @@ pub mod dev {
     pub use super::where_state::WhereState;
     pub use super::group_by::GroupBy;
     pub use super::having::Having;
-    pub use super::order_by::OrderBy;
+    pub use super::order_by::{OrderBy, OrderType};
     pub use super::limit::Limit;
 }

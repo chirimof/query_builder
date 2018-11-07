@@ -2,36 +2,36 @@ use super::*;
 use std::borrow::Cow;
 
 
-pub struct Join<M, T, L, R> {
-    manipulation: M,
+pub struct Join<F, T, L, R> {
+    manipulation: F,
     condition: JoinCondition<T, L, R>,
     join_type: JoinType,
 }
 
-impl<M, T, L, R> Join<M, T, L, R>
+impl<F, T, L, R> Join<F, T, L, R>
     where
-        M: Filter,
+        F: Filter,
         T: AsTable,
         L: AsColumn,
         R: AsColumn
 {
-    pub fn new(manipulation: M, condition: JoinCondition<T, L, R>, join_type: JoinType) -> Self {
+    pub fn new(manipulation: F, condition: JoinCondition<T, L, R>, join_type: JoinType) -> Self {
         Join { manipulation, condition, join_type }
     }
 }
 
-impl<M, T, L, R> Filter for Join<M, T, L, R>
+impl<F, T, L, R> Filter for Join<F, T, L, R>
     where
-        M: Filter,
+        F: Filter,
         T: AsTable,
         L: AsColumn,
         R: AsColumn
 {
 }
 
-impl<M, T, L, R> AsSqlParts for Join<M, T, L, R>
+impl<F, T, L, R> AsSqlParts for Join<F, T, L, R>
     where
-        M: Filter,
+        F: Filter,
         T: AsTable,
         L: AsColumn,
         R: AsColumn
@@ -43,9 +43,9 @@ impl<M, T, L, R> AsSqlParts for Join<M, T, L, R>
     }
 }
 
-impl<M, T, L, R> Executable for Join<M, T, L, R>
+impl<F, T, L, R> Executable for Join<F, T, L, R>
     where
-        M: Filter,
+        F: Filter,
         T: AsTable,
         L: AsColumn,
         R: AsColumn
