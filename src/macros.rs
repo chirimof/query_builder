@@ -18,17 +18,35 @@ macro_rules! setup_table {
 
             impl $crate::as_columns::AsColumns for All {
                 type PrimaryColumn = $primary_type;
-            }
+                fn columns_len(&self) -> usize {
+                    columns_len!($( $col_name ),*)
+                }
 
-            impl $crate::as_sql_parts::AsSqlParts for All {
-                fn as_sql_parts<'a> (&self) -> $crate::std::borrow::Cow<'a, str> {
-                    let s = concat!($(
-                        concat!(
-                            stringify!($namespace), ".", stringify!($col_name)
-                        ),
-                        ", "
-                    ),*);
-                    s.trim_end_matches(", ").into()
+                fn columns_sequence(&self) -> &'static str {
+                    concat!(
+                        $( concat!(stringify!($col_name), ", ") ),*
+                    ).trim_end_matches(", ")
+                }
+
+                fn select_sql_parts(&self) -> &'static str {
+                    concat!(
+                        $(concat!(stringify!($namespace), ".", stringify!($col_name)), ", "),*
+                    ).trim_end_matches(", ")
+                }
+
+                fn insert_sql_parts(&self) -> &'static str {
+                    concat!(
+                        // $col_name is meaningless
+                        sequence_str!{ $($col_name, "?, "),* }
+                    ).trim_end_matches(", ")
+                }
+
+                fn update_sql_parts(&self) -> &'static str {
+                    concat!(
+                        $(
+                            stringify!($col_name), " = ?", ", "
+                        ),*
+                    ).trim_end_matches(", ")
                 }
             }
 
@@ -52,6 +70,21 @@ macro_rules! setup_table {
     };
 }
 
+macro_rules! columns_len {
+    ( $( $col:ident ),* ) => {
+        [$( stringify!($col) ),*].len()
+    }
+}
+
+macro_rules! sequence_str {
+    ( $( $x:ident, $string:expr ),* ) => {
+        concat!(
+            $( $string ),*
+        )
+    }
+}
+
+
 #[cfg(test)]
 mod macros_test {
     use ::dev::*;
@@ -65,7 +98,7 @@ mod macros_test {
     fn test_1() {
 
         assert_eq!(users::Id.as_sql_parts(), "users.id");
-        assert_eq!(users::All.as_sql_parts(), "users.id, users.email");
+        assert_eq!(users::All.select_sql_parts(), "users.id, users.email");
         assert_eq!(users::Table.as_sql_parts(), "users");
     }
 }

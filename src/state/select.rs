@@ -1,4 +1,12 @@
-use super::*;
+use super::AsColumns;
+use super::AsTable;
+use super::Executable;
+use super::AsSqlParts;
+use super::Filter;
+use super::Group;
+use super::Order;
+use super::LimitNumber;
+
 use std::borrow::Cow;
 
 
@@ -17,12 +25,11 @@ impl<T, C> Select<T, C>
     }
 }
 
-impl<T, C> Filter for Select<T, C>
+impl<T, C> Executable for Select<T, C>
     where
         T: AsTable,
         C: AsColumns
-{
-}
+{}
 
 impl<T, C> AsSqlParts for Select<T, C>
     where
@@ -30,13 +37,47 @@ impl<T, C> AsSqlParts for Select<T, C>
         C: AsColumns
 {
     fn as_sql_parts<'a> (&self) -> Cow<'a, str> {
-        format!("SELECT {} FROM {}", self.columns.as_sql_parts(), self.table.as_sql_parts()).into()
+        format!("SELECT {} FROM {}", self.columns.select_sql_parts(), self.table.as_sql_parts()).into()
     }
 }
 
-impl<T, C> Executable for Select<T, C>
+impl<T, C> Filter for Select<T, C>
     where
         T: AsTable,
         C: AsColumns
-{
+{}
+
+impl<T, C> Group for Select<T, C>
+    where
+        T: AsTable,
+        C: AsColumns
+{}
+
+impl<T, C> Order for Select<T, C>
+    where
+        T: AsTable,
+        C: AsColumns
+{}
+
+impl<T, C> LimitNumber for Select<T, C>
+    where
+        T: AsTable,
+        C: AsColumns
+{}
+
+#[cfg(test)]
+mod select_test {
+    use super::*;
+    setup_table!({
+        namespace: users,
+        columns: [{id: Id, name: Name, email: Email}],
+        primary: Id
+    });
+
+    #[test]
+    fn select_test() {
+        let expected = "SELECT users.id, users.name, users.email FROM users";
+        let parts = users::Table.select(users::All);
+        assert_eq!(parts.as_sql_parts(), expected);
+    }
 }

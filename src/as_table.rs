@@ -1,5 +1,5 @@
 use super::dev::*;
-use super::state::dev::Select;
+use super::state::dev::{Select, Insert, Update, Delete};
 
 
 pub trait AsTable: AsSqlParts
@@ -8,8 +8,20 @@ pub trait AsTable: AsSqlParts
     type AllColumns: AsColumns;
     type PrimaryColumn: AsColumn;
 
-    fn select<C: AsColumns> (self, columns: C) -> Select<Self, C> {
+    fn select<COLS: AsColumns> (self, columns: COLS) -> Select<Self, COLS> {
         Select::new(self, columns)
+    }
+
+    fn insert<COLS: AsColumns> (self, columns: COLS) -> Insert<Self, COLS> {
+        Insert::new(self, columns)
+    }
+
+    fn update<COLS: AsColumns> (self, columns: COLS) -> Update<Self, COLS> {
+        Update::new(self, columns)
+    }
+
+    fn delete(self) -> Delete<Self> {
+        Delete::new(self)
     }
 
     fn primary_column(&self) -> Self::PrimaryColumn;

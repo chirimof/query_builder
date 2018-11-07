@@ -19,21 +19,24 @@ impl<F, C> WhereState<F, C>
 
 impl<F, C> AsSqlParts for WhereState<F, C>
     where
+        F: Filter,
         C: Condition
 {
     fn as_sql_parts<'a> (&self) -> Cow<'a, str> {
-        format!("WHERE {}", self.conditions.as_sql_parts()).into()
+        format!("{} WHERE {}", self.manipulation.as_sql_parts(), self.conditions.as_sql_parts()).into()
     }
 }
 
 impl<F, C> Executable for WhereState<F, C>
     where
+        F: Filter,
         C: Condition
 {
 }
 
 impl<F, C> Group for WhereState<F, C>
     where
+        F: Filter,
         C: Condition
 {
 }
