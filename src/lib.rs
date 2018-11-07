@@ -2,19 +2,21 @@
 
 pub mod as_sql_parts;
 pub mod conditions;
-pub mod column;
-pub mod table;
+pub mod as_column;
+pub mod as_columns;
+pub mod as_table;
 pub mod manipulations;
 
 
 pub mod prelude {
     pub use super::as_sql_parts::AsSqlParts;
-    pub use super::column::Column;
+    pub use super::as_column::AsColumn;
+    pub use super::as_columns::AsColumns;
     pub use super::manipulations::{
         select::Select,
         Insert, Update, Delete
     };
-    pub use super::table::{Table, Columns};
+    pub use super::as_table::AsTable;
     pub use super::macros;
 }
 

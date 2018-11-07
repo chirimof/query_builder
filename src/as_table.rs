@@ -1,22 +1,19 @@
 use ::prelude::*;
 
 
-pub trait Table: AsSqlParts
+pub trait AsTable: AsSqlParts
     where Self: Sized
 {
-    type AllColumns: Columns;
-    type PrimaryColumn: Column;
+    type AllColumns: AsColumns;
+    type PrimaryColumn: AsColumn;
 
-    fn select<C: Columns> (self, columns: C) -> Select<Self, C> {
+    fn select<C: AsColumns> (self, columns: C) -> Select<Self, C> {
         Select::new(self, columns)
     }
 
     fn primary_column(&self) -> Self::PrimaryColumn;
 }
 
-pub trait Columns: AsSqlParts {
-    type PrimaryColumn: Column;
-}
 
 
 #[cfg(test)]
@@ -45,7 +42,7 @@ mod manipulate_test {
     #[test]
     fn select_test() {
         let expected = "SELECT users.id, users.age FROM users";
-        let parts = users::QueryTable.select(users::All);
+        let parts = users::Table.select(users::All);
         assert_eq!(parts.as_sql_parts(), expected);
     }
 
@@ -53,8 +50,8 @@ mod manipulate_test {
     fn join_1_test() {
         let expected = "SELECT users.id, users.age FROM users INNER JOIN posts ON \
         posts.author_id = users.id";
-        let parts = users::QueryTable.select(users::All)
-            .inner_join(posts::QueryTable, posts::AuthorId, users::Id);
+        let parts = users::Table.select(users::All)
+            .inner_join(posts::Table, posts::AuthorId, users::Id);
         assert_eq!(parts.as_sql_parts(), expected);
     }
 
@@ -64,9 +61,9 @@ mod manipulate_test {
         INNER JOIN posts ON posts.author_id = users.id \
         INNER JOIN categories ON categories.post_id = posts.id";
 
-        let parts = users::QueryTable.select(users::All)
-            .inner_join(posts::QueryTable, posts::AuthorId, users::Id)
-            .inner_join(categories::QueryTable, categories::PostId, posts::Id);
+        let parts = users::Table.select(users::All)
+            .inner_join(posts::Table, posts::AuthorId, users::Id)
+            .inner_join(categories::Table, categories::PostId, posts::Id);
         assert_eq!(parts.as_sql_parts(), expected);
 
         // Use left outer join
@@ -74,9 +71,9 @@ mod manipulate_test {
         LEFT OUTER JOIN posts ON posts.author_id = users.id \
         INNER JOIN categories ON categories.post_id = posts.id";
 
-        let parts = users::QueryTable.select(users::All)
-            .left_outer(posts::QueryTable, posts::AuthorId, users::Id)
-            .inner_join(categories::QueryTable, categories::PostId, posts::Id);
+        let parts = users::Table.select(users::All)
+            .left_outer(posts::Table, posts::AuthorId, users::Id)
+            .inner_join(categories::Table, categories::PostId, posts::Id);
         assert_eq!(parts.as_sql_parts(), expected);
     }
 }

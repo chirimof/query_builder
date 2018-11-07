@@ -2,7 +2,7 @@ use ::prelude::*;
 use ::conditions::*;
 
 
-pub trait Column: AsSqlParts
+pub trait AsColumn: AsSqlParts
     where Self: Sized
 {
     fn equal(self) -> Equal<Self> {

@@ -9,7 +9,7 @@ macro_rules! setup_table {
         pub mod $namespace {
             $(
                 pub struct $col_type;
-                impl $crate::column::Column for $col_type {}
+                impl $crate::as_column::AsColumn for $col_type {}
                 impl $crate::as_sql_parts::AsSqlParts for $col_type {
                     fn as_sql_parts<'a> (&self) -> $crate::std::borrow::Cow<'a, str> {
                         concat!(stringify!($namespace), ".", stringify!($col_name)).into()
@@ -19,11 +19,11 @@ macro_rules! setup_table {
 
             pub struct All;
 
-            impl $crate::table::Columns for All {
+            impl $crate::as_columns::AsColumns for All {
                 type PrimaryColumn = $primary_type;
             }
 
-            impl $crate::as_sql::AsSqlParts for All {
+            impl $crate::as_sql_parts::AsSqlParts for All {
                 fn as_sql_parts<'a> (&self) -> $crate::std::borrow::Cow<'a, str> {
                     let s = concat!($(
                         concat!(
@@ -35,8 +35,8 @@ macro_rules! setup_table {
                 }
             }
 
-            pub struct QueryTable;
-            impl $crate::table::Table for QueryTable {
+            pub struct Table;
+            impl $crate::as_table::AsTable for Table {
                 type AllColumns = All;
                 type PrimaryColumn = $primary_type;
 
@@ -45,7 +45,7 @@ macro_rules! setup_table {
                 }
             }
 
-            impl $crate::as_sql_parts::AsSqlParts for QueryTable {
+            impl $crate::as_sql_parts::AsSqlParts for Table {
                 fn as_sql_parts<'a> (&self) -> $crate::std::borrow::Cow<'a, str> {
                     stringify!($namespace).into()
                 }
@@ -69,6 +69,6 @@ mod macros_test {
 
         assert_eq!(users::Id.as_sql_parts(), "users.id");
         assert_eq!(users::All.as_sql_parts(), "users.id, users.email");
-        assert_eq!(users::QueryTable.as_sql_parts(), "users");
+        assert_eq!(users::Table.as_sql_parts(), "users");
     }
 }

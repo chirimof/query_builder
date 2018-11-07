@@ -34,7 +34,7 @@ pub struct Equal<Col> {
 }
 
 impl<Col> Equal<Col>
-    where Col: Column
+    where Col: AsColumn
 {
     pub fn new(column: Col) -> Self {
         Equal { column }
@@ -42,12 +42,12 @@ impl<Col> Equal<Col>
 }
 
 impl<Col> Condition for Equal<Col>
-    where Col: Column
+    where Col: AsColumn
 {
 }
 
 impl<Col> AsSqlParts for Equal<Col>
-    where Col: Column
+    where Col: AsColumn
 {
     fn as_sql_parts<'a> (&self) -> Cow<'a, str> {
         format!("{} = ?", self.column.as_sql_parts()).into()
@@ -60,7 +60,7 @@ pub struct NotEq<Col>
 }
 
 impl<Col> NotEq<Col>
-    where Col: Column
+    where Col: AsColumn
 {
     pub fn new(column: Col) -> Self {
         NotEq { column }
@@ -68,12 +68,12 @@ impl<Col> NotEq<Col>
 }
 
 impl<Col> Condition for NotEq<Col>
-    where Col: Column
+    where Col: AsColumn
 {
 }
 
 impl<Col> AsSqlParts for NotEq<Col>
-    where Col: Column
+    where Col: AsColumn
 {
 
     fn as_sql_parts<'a> (&self) -> Cow<'a, str> {
@@ -87,7 +87,7 @@ pub struct Greater<Col>
 }
 
 impl<Col> Greater<Col>
-    where Col: Column
+    where Col: AsColumn
 {
     pub fn new(column: Col) -> Self {
         Greater { column }
@@ -95,12 +95,12 @@ impl<Col> Greater<Col>
 }
 
 impl<Col> Condition for Greater<Col>
-    where Col: Column
+    where Col: AsColumn
 {
 }
 
 impl<Col> AsSqlParts for Greater<Col>
-    where Col: Column
+    where Col: AsColumn
 {
     fn as_sql_parts<'a> (&self) -> Cow<'a, str> {
         format!("{} > ?", self.column.as_sql_parts()).into()
@@ -112,7 +112,7 @@ pub struct GreaterEq<Col> {
 }
 
 impl<Col> GreaterEq<Col>
-    where Col: Column
+    where Col: AsColumn
 {
     pub fn new(column: Col) -> Self {
         GreaterEq { column }
@@ -120,11 +120,11 @@ impl<Col> GreaterEq<Col>
 }
 
 impl<Col> Condition for GreaterEq<Col>
-    where Col: Column
+    where Col: AsColumn
 {}
 
 impl<Col> AsSqlParts for GreaterEq<Col>
-    where Col: Column
+    where Col: AsColumn
 {
     fn as_sql_parts<'a> (&self) -> Cow<'a, str> {
         format!("{} >= ?", self.column.as_sql_parts()).into()
@@ -136,7 +136,7 @@ pub struct Less<Col> {
 }
 
 impl<Col> Less<Col>
-    where Col: Column
+    where Col: AsColumn
 {
     pub fn new(column: Col) -> Self {
         Less { column }
@@ -144,12 +144,12 @@ impl<Col> Less<Col>
 }
 
 impl<Col> Condition for Less<Col>
-    where Col: Column
+    where Col: AsColumn
 {
 }
 
 impl<Col> AsSqlParts for Less<Col>
-    where Col: Column
+    where Col: AsColumn
 {
     fn as_sql_parts<'a> (&self) -> Cow<'a, str> {
         format!("{} < ?", self.column.as_sql_parts()).into()
@@ -161,7 +161,7 @@ pub struct LessEq<Col> {
 }
 
 impl<Col> LessEq<Col>
-    where Col: Column
+    where Col: AsColumn
 {
     pub fn new(column: Col) -> Self {
         LessEq { column }
@@ -169,12 +169,12 @@ impl<Col> LessEq<Col>
 }
 
 impl<Col> Condition for LessEq<Col>
-    where Col: Column
+    where Col: AsColumn
 {
 }
 
 impl<Col> AsSqlParts for LessEq<Col>
-    where Col: Column
+    where Col: AsColumn
 {
     fn as_sql_parts<'a> (&self) -> Cow<'a, str> {
         format!("{} <= ?", self.column.as_sql_parts()).into()
@@ -186,7 +186,7 @@ pub struct Between<Col> {
 }
 
 impl<Col> Between<Col>
-    where Col: Column
+    where Col: AsColumn
 {
     pub fn new(column: Col) -> Self {
         Between { column }
@@ -194,11 +194,11 @@ impl<Col> Between<Col>
 }
 
 impl<Col> Condition for Between<Col>
-    where Col: Column
+    where Col: AsColumn
 {}
 
 impl<Col> AsSqlParts for Between<Col>
-    where Col: Column
+    where Col: AsColumn
 {
     fn as_sql_parts<'a> (&self) -> Cow<'a, str> {
         format!("{} BETWEEN ? AND ?", self.column.as_sql_parts()).into()
@@ -211,7 +211,7 @@ pub struct Included<Col> {
 }
 
 impl<Col> Included<Col>
-    where Col: Column
+    where Col: AsColumn
 {
     pub fn new(column: Col, len: usize) -> Self {
         Included { column, len }
@@ -219,12 +219,12 @@ impl<Col> Included<Col>
 }
 
 impl<Col> Condition for Included<Col>
-    where Col: Column
+    where Col: AsColumn
 {
 }
 
 impl<Col> AsSqlParts for Included<Col>
-    where Col: Column
+    where Col: AsColumn
 {
     fn as_sql_parts<'a> (&self) -> Cow<'a, str> {
         format!("{} IN ( {} )", self.column.as_sql_parts(), multiple_placeholder(self.len)).into()
@@ -236,7 +236,7 @@ pub struct Like<Col> {
 }
 
 impl<Col> Like<Col>
-    where Col: Column
+    where Col: AsColumn
 {
     pub fn new(column: Col) -> Self {
         Like { column }
@@ -244,12 +244,12 @@ impl<Col> Like<Col>
 }
 
 impl<Col> Condition for Like<Col>
-    where Col: Column
+    where Col: AsColumn
 {
 }
 
 impl<Col> AsSqlParts for Like<Col>
-    where Col: Column
+    where Col: AsColumn
 {
     fn as_sql_parts<'a> (&self) -> Cow<'a, str> {
         format!("{} LIKE ?", self.column.as_sql_parts()).into()
