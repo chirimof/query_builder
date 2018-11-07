@@ -10,7 +10,7 @@ macro_rules! setup_table {
             $(
                 pub struct $col_type;
                 impl $crate::column::Column for $col_type {}
-                impl $crate::as_sql::AsSqlParts for $col_type {
+                impl $crate::as_sql_parts::AsSqlParts for $col_type {
                     fn as_sql_parts<'a> (&self) -> $crate::std::borrow::Cow<'a, str> {
                         concat!(stringify!($namespace), ".", stringify!($col_name)).into()
                     }
@@ -45,7 +45,7 @@ macro_rules! setup_table {
                 }
             }
 
-            impl $crate::as_sql::AsSqlParts for QueryTable {
+            impl $crate::as_sql_parts::AsSqlParts for QueryTable {
                 fn as_sql_parts<'a> (&self) -> $crate::std::borrow::Cow<'a, str> {
                     stringify!($namespace).into()
                 }

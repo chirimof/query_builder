@@ -46,27 +46,13 @@ pub trait Column: AsSqlParts
 #[cfg(test)]
 mod simple_test {
     use super::*;
-    use self::UserColumn::*;
-    use std::borrow::Cow;
 
-    enum UserColumn {
-        Id,
-        Name,
-        Email,
-        Admin,
-    }
-    impl Column for UserColumn {}
-
-    impl AsSqlParts for UserColumn {
-        fn as_sql_parts<'a> (&self) -> Cow<'a, str> {
-            match self {
-                UserColumn::Id => "users.id".into(),
-                UserColumn::Name => "users.name".into(),
-                UserColumn::Email => "users.email".into(),
-                UserColumn::Admin => "users.admin".into()
-            }
-        }
-    }
+    setup_table!({
+        namespace: users,
+        columns: [{id: Id, admin: Admin}],
+        primary: Id
+    });
+    use self::users::*;
 
     #[test]
     fn eq_test() {

@@ -1,6 +1,6 @@
 #[macro_use] pub mod macros;
 
-pub mod as_sql;
+pub mod as_sql_parts;
 pub mod conditions;
 pub mod column;
 pub mod table;
@@ -8,7 +8,7 @@ pub mod manipulations;
 
 
 pub mod prelude {
-    pub use super::as_sql::AsSqlParts;
+    pub use super::as_sql_parts::AsSqlParts;
     pub use super::column::Column;
     pub use super::manipulations::{
         select::Select,
