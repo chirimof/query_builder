@@ -62,4 +62,11 @@ mod adjustment_test {
         let parts = users::Table.select(users::All).limit_offset(5, 10);
         assert_eq!(parts.as_sql_parts(), expected);
     }
+
+    #[test]
+    fn no_limit_test() {
+        let expected = "SELECT users.name FROM users";
+        let parts = users::Table.select(users::Name).no_limit();
+        assert_eq!(parts.as_sql_parts(), expected);
+    }
 }

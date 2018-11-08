@@ -1,38 +1,38 @@
 use super::{
     AsSqlParts, AsColumn,
     // adapters
-    Executable, Order
+    Executable, Order, LimitNumber
 };
 use std::borrow::Cow;
 
-pub struct OrderBy<O, Col> {
+pub struct OrderBy<O, COL> {
     manipulation: O,
-    column: Col,
+    column: COL,
     order_type: OrderType,
     count: u8
 }
 
-impl<O, Col> OrderBy<O, Col>
+impl<O, COL> OrderBy<O, COL>
     where
         O: Order,
-        Col: AsColumn
+        COL: AsColumn
 {
-    pub fn new(manipulation: O, column: Col, order_type: OrderType, count: u8) -> Self {
+    pub fn new(manipulation: O, column: COL, order_type: OrderType, count: u8) -> Self {
         OrderBy { manipulation, column, order_type, count }
     }
 }
 
-impl<O, Col> Executable for OrderBy<O, Col>
+impl<O, COL> Executable for OrderBy<O, COL>
     where
         O: Order,
-        Col: AsColumn
+        COL: AsColumn
 {
 }
 
-impl<O, Col> AsSqlParts for OrderBy<O, Col>
+impl<O, COL> AsSqlParts for OrderBy<O, COL>
     where
         O: Order,
-        Col: AsColumn
+        COL: AsColumn
 {
     fn as_sql_parts<'a> (&self) -> Cow<'a, str> {
         if self.count == 1 {
@@ -48,10 +48,10 @@ impl<O, Col> AsSqlParts for OrderBy<O, Col>
     }
 }
 
-impl<O, Col> Order for OrderBy<O, Col>
+impl<O, COL> Order for OrderBy<O, COL>
     where
         O: Order,
-        Col: AsColumn
+        COL: AsColumn
 {
     fn order_asc<C: AsColumn> (self, column: C) -> OrderBy<Self, C> {
         let count = self.count + 1;
@@ -63,6 +63,12 @@ impl<O, Col> Order for OrderBy<O, Col>
         OrderBy::new(self, column, OrderType::Desc, count)
     }
 }
+
+impl<O, COL> LimitNumber for OrderBy<O, COL>
+    where
+        O: Order,
+        COL: AsColumn
+{}
 
 pub enum OrderType {
     Asc,
