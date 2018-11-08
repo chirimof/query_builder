@@ -1,4 +1,8 @@
-use super::*;
+use super::{
+    AsSqlParts, AsColumn,
+    // adapters
+    Executable, Order
+};
 use std::borrow::Cow;
 
 pub struct OrderBy<O, Col> {

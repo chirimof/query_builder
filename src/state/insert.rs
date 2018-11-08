@@ -1,12 +1,8 @@
-use super::AsTable;
-use super::AsColumns;
-
-use super::Executable;
-use super::AsSqlParts;
-use super::Filter;
-use super::Group;
-use super::Order;
-use super::LimitNumber;
+use super::{
+    AsSqlParts, AsTable, AsColumns,
+    // adapters
+    Executable, Filter, Group, Order, LimitNumber
+};
 
 use ::multiple_placeholder;
 

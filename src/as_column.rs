@@ -1,4 +1,4 @@
-use super::dev::*;
+use super::prelude::AsSqlParts;
 use super::conditions::*;
 
 

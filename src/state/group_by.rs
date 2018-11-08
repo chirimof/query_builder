@@ -1,4 +1,8 @@
-use super::*;
+use super::{
+    AsSqlParts, AsColumn,
+    // adapters
+    Executable, Group, ChooseGroup
+};
 use std::borrow::Cow;
 
 

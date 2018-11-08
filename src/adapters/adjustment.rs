@@ -35,7 +35,7 @@ pub trait LimitNumber: AsSqlParts
 #[cfg(test)]
 mod adjustment_test {
     use super::*;
-    use ::dev::*;
+    use ::prelude::*;
     setup_table!({
         namespace: users,
         column_set: {id: Id, name: Name, email: Email},

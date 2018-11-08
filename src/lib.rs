@@ -7,23 +7,22 @@ mod as_column;
 mod as_columns;
 mod as_table;
 mod adapters;
-pub mod state;
+mod state;
 
-mod dev {
-    pub use super::as_sql_parts::AsSqlParts;
-    pub use super::as_column::AsColumn;
-    pub use super::as_columns::AsColumns;
-    pub use super::as_table::AsTable;
-    pub use super::conditions::Condition;
-}
 
 pub mod prelude {
+    // export traits
     pub use super::as_sql_parts::AsSqlParts;
     pub use super::as_column::AsColumn;
     pub use super::as_columns::AsColumns;
     pub use super::as_table::AsTable;
     pub use super::conditions::Condition;
     pub use super::adapters::dev::{Executable, Filter, ChooseGroup, Group, Order, LimitNumber};
+}
+
+pub mod dev {
+    pub use super::state::dev::*;
+    pub use super::adapters::dev::*;
 }
 
 

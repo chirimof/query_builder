@@ -1,11 +1,8 @@
-use super::AsSqlParts;
-use super::Condition;
-
-use super::Executable;
-use super::Filter;
-use super::Group;
-use super::Order;
-use super::LimitNumber;
+use super::{
+    AsSqlParts, Condition,
+    // adapters
+    Executable, Filter, Group, Order, LimitNumber
+};
 
 use std::borrow::Cow;
 

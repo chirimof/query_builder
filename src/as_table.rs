@@ -1,4 +1,4 @@
-use super::dev::*;
+use super::prelude::{AsSqlParts, AsColumns};
 use super::state::dev::{Select, Insert, Update, Delete};
 
 

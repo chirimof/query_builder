@@ -1,4 +1,8 @@
-use super::*;
+use super::{
+    AsSqlParts, Condition,
+    // adapters
+    Executable, ChooseGroup
+};
 use std::borrow::Cow;
 
 pub struct Having<Ch, Cond> {

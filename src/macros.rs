@@ -143,7 +143,7 @@ macro_rules! create_columns {
 
 #[cfg(test)]
 mod macros_test {
-    use ::dev::*;
+    use ::prelude::*;
     setup_table!({
             namespace: users,
             column_set: {id: Id, email: Email},

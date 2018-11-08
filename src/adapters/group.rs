@@ -25,7 +25,7 @@ pub trait ChooseGroup: AsSqlParts
 #[cfg(test)]
 mod group_test {
     use super::*;
-    use ::dev::*;
+    use ::prelude::*;
     setup_table!({
         namespace: users,
         column_set: {id: Id, name: Name, email: Email},

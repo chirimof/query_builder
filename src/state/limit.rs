@@ -1,6 +1,9 @@
-use super::LimitNumber;
-use super::Executable;
-use super::AsSqlParts;
+use super::{
+    AsSqlParts,
+    // adapters
+    Executable, LimitNumber
+};
+
 use std::borrow::Cow;
 
 

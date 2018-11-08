@@ -1,4 +1,4 @@
-use super::dev::*;
+use super::prelude::{AsSqlParts, AsColumn};
 use super::multiple_placeholder;
 
 use std::borrow::Cow;
