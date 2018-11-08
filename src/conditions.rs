@@ -227,7 +227,7 @@ impl<Col> AsSqlParts for Included<Col>
     where Col: AsColumn
 {
     fn as_sql_parts<'a> (&self) -> Cow<'a, str> {
-        format!("{} IN ( {} )", self.column.as_sql_parts(), multiple_placeholder(self.len)).into()
+        format!("{} IN ( {} )", self.column.as_sql_parts(), multiple_placeholder(self.len, "?")).into()
     }
 }
 
@@ -413,6 +413,7 @@ impl<Cond> AsSqlParts for Priority<Cond>
 
 #[cfg(test)]
 mod simple_test {
+    #![allow(dead_code)]
     use super::*;
 
     setup_table!({
@@ -484,6 +485,7 @@ mod simple_test {
 
 #[cfg(test)]
 mod complex_test {
+    #![allow(dead_code)]
     use super::*;
 
     setup_table!({

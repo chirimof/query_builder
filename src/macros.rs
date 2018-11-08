@@ -1,4 +1,4 @@
-#[allow(unused_macros)]
+#[macro_export]
 macro_rules! setup_table {
     ( { namespace: $namespace:ident,
         column_set: { $( $col_name:ident : $col_type:ident ),* },
@@ -92,12 +92,7 @@ macro_rules! setup_table {
     };
 }
 
-macro_rules! columns_len {
-    ( $( $col:ident ),* ) => {
-        [$( stringify!($col) ),*].len()
-    }
-}
-
+#[allow(unused_macros)]
 macro_rules! sequence_str {
     ( $( $x:ident, $string:expr ),* ) => {
         concat!(
@@ -106,15 +101,14 @@ macro_rules! sequence_str {
     }
 }
 
+#[allow(unused_macros)]
 macro_rules! create_columns {
     ( { $cols:ident: { $( $namespace:ident : $col:ident ),* } } ) => {
 
+        #[allow(dead_code)]
         pub struct $cols;
 
         impl $crate::as_columns::AsColumns for $cols {
-            fn columns_len(&self) -> usize {
-                columns_len!($( $col ),*)
-            }
 
             fn columns_sequence(&self) -> &'static str {
                 concat!(
@@ -179,6 +173,8 @@ mod macros_test {
         assert_eq!(users::All.insert_sql_parts(), "?, ?");
         assert_eq!(users::All.update_sql_parts(), "id = ?, email = ?");
         assert_eq!(users::Table.as_sql_parts(), "users");
+        assert_eq!(posts::Table.as_sql_parts(), "posts");
+        assert_eq!(categories::Table.as_sql_parts(), "categories");
     }
 
     #[test]
