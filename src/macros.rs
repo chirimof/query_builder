@@ -14,8 +14,8 @@ macro_rules! setup_table {
             )*
             $(
                 //pub struct $col_type;
-                impl $crate::dev::AsColumn for $col_type {}
-                impl $crate::dev::AsSqlParts for $col_type {
+                impl $crate::prelude::AsColumn for $col_type {}
+                impl $crate::prelude::AsSqlParts for $col_type {
                     fn as_sql_parts<'a> (&self) -> $crate::std::borrow::Cow<'a, str> {
                         concat!(stringify!($namespace), ".", stringify!($col_name)).into()
                     }
@@ -25,11 +25,11 @@ macro_rules! setup_table {
             create_columns!( { All: { $( $namespace : $col_name ),* } } );
 
             pub struct Table;
-            impl $crate::dev::AsTable for Table {
+            impl $crate::prelude::AsTable for Table {
                 type AllColumns = All;
             }
 
-            impl $crate::dev::AsSqlParts for Table {
+            impl $crate::prelude::AsSqlParts for Table {
                 fn as_sql_parts<'a> (&self) -> $crate::std::borrow::Cow<'a, str> {
                     stringify!($namespace).into()
                 }
@@ -108,7 +108,7 @@ macro_rules! create_columns {
         #[allow(dead_code)]
         pub struct $cols;
 
-        impl $crate::dev::AsColumns for $cols {
+        impl $crate::prelude::AsColumns for $cols {
 
             fn columns_sequence(&self) -> &'static str {
                 concat!(
