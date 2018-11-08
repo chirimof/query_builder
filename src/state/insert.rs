@@ -77,8 +77,7 @@ mod insert_test {
     use super::*;
     setup_table!({
         namespace: users,
-        columns: [{id: Id, name: Name, email: Email}],
-        primary: Id
+        column_set: {id: Id, name: Name, email: Email},
     });
 
     #[test]

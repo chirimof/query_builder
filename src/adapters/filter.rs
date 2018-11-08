@@ -31,14 +31,17 @@ mod filter_test {
     use super::*;
     setup_table!({
         namespace: users,
-        columns: [{id: Id, name: Name, email: Email}],
-        primary: Id
+        column_set: {id: Id, name: Name, email: Email},
     });
 
     setup_table!({
         namespace: posts,
-        columns: [{id: Id, title: Title, user_id: UserId}],
-        primary: Id
+        column_set: {id: Id, title: Title, user_id: UserId},
+    });
+
+    setup_table!({
+        namespace: categories,
+        column_set: {id: Id, word: Word, post_id: PostId},
     });
 
     #[test]
@@ -78,6 +81,28 @@ mod filter_test {
             .inner_join(posts::Table, posts::UserId, users::Id)
             .use_where(users::Name.equal().and(posts::Title.equal()));
 
+        assert_eq!(parts.as_sql_parts(), expected);
+    }
+
+    #[test]
+    fn join_2_test() {
+        let expected = "SELECT users.id, users.name, users.email FROM users \
+        INNER JOIN posts ON posts.user_id = users.id \
+        INNER JOIN categories ON categories.post_id = posts.id";
+
+        let parts = users::Table.select(users::All)
+            .inner_join(posts::Table, posts::UserId, users::Id)
+            .inner_join(categories::Table, categories::PostId, posts::Id);
+        assert_eq!(parts.as_sql_parts(), expected);
+
+        // Use left outer join
+        let expected = "SELECT users.id, users.name, users.email FROM users \
+        LEFT OUTER JOIN posts ON posts.user_id = users.id \
+        INNER JOIN categories ON categories.post_id = posts.id";
+
+        let parts = users::Table.select(users::All)
+            .left_outer(posts::Table, posts::UserId, users::Id)
+            .inner_join(categories::Table, categories::PostId, posts::Id);
         assert_eq!(parts.as_sql_parts(), expected);
     }
 }
