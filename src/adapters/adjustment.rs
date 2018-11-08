@@ -24,11 +24,15 @@ pub trait LimitNumber: AsSqlParts
     where Self: Sized
 {
     fn limit(self, num: u32) -> Limit<Self> {
-        Limit::new(self, num, None)
+        Limit::new(self, Some(num), None)
     }
 
     fn limit_offset(self, num: u32, offset: u32) -> Limit<Self> {
-        Limit::new(self, num, Some(offset))
+        Limit::new(self, Some(num), Some(offset))
+    }
+
+    fn no_limit(self) -> Limit<Self> {
+        Limit::new(self, None, None)
     }
 }
 
