@@ -92,7 +92,7 @@ macro_rules! setup_table {
     };
 }
 
-#[allow(unused_macros)]
+#[macro_export]
 macro_rules! sequence_str {
     ( $( $x:ident, $string:expr ),* ) => {
         concat!(
@@ -101,7 +101,7 @@ macro_rules! sequence_str {
     }
 }
 
-#[allow(unused_macros)]
+#[macro_export]
 macro_rules! create_columns {
     ( { $cols:ident: { $( $namespace:ident : $col:ident ),* } } ) => {
 
