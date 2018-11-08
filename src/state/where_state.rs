@@ -1,6 +1,13 @@
-use super::*;
-use std::borrow::Cow;
+use super::AsSqlParts;
+use super::Condition;
 
+use super::Executable;
+use super::Filter;
+use super::Group;
+use super::Order;
+use super::LimitNumber;
+
+use std::borrow::Cow;
 
 pub struct WhereState<F, C> {
     manipulation: F,
@@ -40,3 +47,15 @@ impl<F, C> Group for WhereState<F, C>
         C: Condition
 {
 }
+
+impl<F, C> Order for WhereState<F, C>
+    where
+        F: Filter,
+        C: Condition
+{}
+
+impl<F, C> LimitNumber for WhereState<F, C>
+    where
+        F: Filter,
+        C: Condition
+{}
