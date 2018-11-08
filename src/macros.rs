@@ -16,7 +16,7 @@ macro_rules! setup_table {
                 //pub struct $col_type;
                 impl $crate::prelude::AsColumn for $col_type {}
                 impl $crate::prelude::AsSqlParts for $col_type {
-                    fn as_sql_parts<'a> (&self) -> $crate::std::borrow::Cow<'a, str> {
+                    fn as_sql_parts<'a> (&self) -> ::std::borrow::Cow<'a, str> {
                         concat!(stringify!($namespace), ".", stringify!($col_name)).into()
                     }
                 }
@@ -30,7 +30,7 @@ macro_rules! setup_table {
             }
 
             impl $crate::prelude::AsSqlParts for Table {
-                fn as_sql_parts<'a> (&self) -> $crate::std::borrow::Cow<'a, str> {
+                fn as_sql_parts<'a> (&self) -> ::std::borrow::Cow<'a, str> {
                     stringify!($namespace).into()
                 }
             }
