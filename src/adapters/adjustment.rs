@@ -13,6 +13,10 @@ pub trait Order: AsSqlParts
     fn order_desc<Col: AsColumn> (self, column: Col) -> OrderBy<Self, Col> {
         OrderBy::new(self, column, OrderType::Desc, 1)
     }
+
+    fn order<Col: AsColumn> (self, column: Col, order_type: OrderType) -> OrderBy<Self, Col> {
+        OrderBy::new(self, column, order_type, 1)
+    }
 }
 
 
