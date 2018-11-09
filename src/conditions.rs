@@ -227,7 +227,12 @@ impl<Col> AsSqlParts for Included<Col>
     where Col: AsColumn
 {
     fn as_sql_parts<'a> (&self) -> Cow<'a, str> {
-        format!("{} IN ( {} )", self.column.as_sql_parts(), multiple_placeholder(self.len, "?")).into()
+        if self.len > 0 {
+            format!("{} IN ( {} )", self.column.as_sql_parts(), multiple_placeholder(self.len, "?")).into()
+        } else {
+            // Useful when use function that may take length 0
+            "".into()
+        }
     }
 }
 
@@ -468,6 +473,10 @@ mod simple_test {
     fn included_test() {
         let parts = Id.included(3);
         assert_eq!(parts.as_sql_parts(), "users.id IN ( ?, ?, ? )");
+
+        // If length is 0
+        let parts = Id.included(0);
+        assert_eq!(parts.as_sql_parts(), "");
     }
 
     #[test]
