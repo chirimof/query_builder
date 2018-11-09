@@ -15,7 +15,7 @@ mod order_by;
 mod limit;
 
 pub mod dev {
-    pub use super::select::Select;
+    pub use super::select::{Select};
     pub use super::insert::Insert;
     pub use super::update::Update;
     pub use super::delete::Delete;

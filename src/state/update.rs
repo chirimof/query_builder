@@ -7,31 +7,31 @@ use super::{
 use std::borrow::Cow;
 
 
-pub struct Update<T, COLS> {
+pub struct Update<T, Cols> {
     table: T,
-    columns: COLS
+    columns: Cols
 }
 
-impl<T, COLS> Update<T, COLS>
+impl<T, Cols> Update<T, Cols>
     where
         T: AsTable,
-        COLS: AsColumns
+        Cols: AsColumns
 {
-    pub fn new(table: T, columns: COLS) -> Self {
+    pub fn new(table: T, columns: Cols) -> Self {
         Update { table, columns }
     }
 }
 
-impl<T, COLS> Executable for Update<T, COLS>
+impl<T, Cols> Executable for Update<T, Cols>
     where
         T: AsTable,
-        COLS: AsColumns
+        Cols: AsColumns
 {}
 
-impl<T, COLS> AsSqlParts for Update<T, COLS>
+impl<T, Cols> AsSqlParts for Update<T, Cols>
     where
         T: AsTable,
-        COLS: AsColumns
+        Cols: AsColumns
 {
     fn as_sql_parts<'a> (&self) -> Cow<'a, str> {
         format!("UPDATE {} SET {}",
@@ -41,28 +41,28 @@ impl<T, COLS> AsSqlParts for Update<T, COLS>
     }
 }
 
-impl<T, COLS> Filter for Update<T, COLS>
+impl<T, Cols> Filter for Update<T, Cols>
     where
         T: AsTable,
-        COLS: AsColumns
+        Cols: AsColumns
 {}
 
-impl<T, COLS> Group for Update<T, COLS>
+impl<T, Cols> Group for Update<T, Cols>
     where
         T: AsTable,
-        COLS: AsColumns
+        Cols: AsColumns
 {}
 
-impl<T, COLS> Order for Update<T, COLS>
+impl<T, Cols> Order for Update<T, Cols>
     where
         T: AsTable,
-        COLS: AsColumns
+        Cols: AsColumns
 {}
 
-impl<T, COLS> LimitNumber for Update<T, COLS>
+impl<T, Cols> LimitNumber for Update<T, Cols>
     where
         T: AsTable,
-        COLS: AsColumns
+        Cols: AsColumns
 {}
 
 #[cfg(test)]

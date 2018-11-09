@@ -24,11 +24,10 @@ pub mod dev {
     pub use super::state::dev::*;
     pub use super::adapters::dev::*;
 
-    pub fn returning_sql<COLS: super::as_columns::AsColumns> (cols: COLS) -> String {
+    pub fn returning_sql<Cols: super::as_columns::AsColumns> (cols: Cols) -> String {
         format!("RETURNING {}", cols.columns_sequence())
     }
 }
-
 
 fn multiple_placeholder(len: usize, repeat_str: &str) -> String {
     (0..len)

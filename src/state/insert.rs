@@ -1,7 +1,7 @@
 use super::{
     AsSqlParts, AsTable, AsColumns,
     // adapters
-    Executable, Filter, Group, Order, LimitNumber
+    Executable
 };
 
 use ::multiple_placeholder;
@@ -9,32 +9,32 @@ use ::multiple_placeholder;
 use std::borrow::Cow;
 
 
-pub struct Insert<T, COLS> {
+pub struct Insert<T, Cols> {
     table: T,
-    columns: COLS,
+    columns: Cols,
     bulk: Option<usize>
 }
 
-impl<T, COLS> Insert<T, COLS>
+impl<T, Cols> Insert<T, Cols>
     where
         T: AsTable,
-        COLS: AsColumns
+        Cols: AsColumns
 {
-    pub fn new(table: T, columns: COLS, bulk: Option<usize>) -> Self {
+    pub fn new(table: T, columns: Cols, bulk: Option<usize>) -> Self {
         Insert { table, columns, bulk }
     }
 }
 
-impl<T, COLS> Executable for Insert<T, COLS>
+impl<T, Cols> Executable for Insert<T, Cols>
     where
         T: AsTable,
-        COLS: AsColumns
+        Cols: AsColumns
 {}
 
-impl<T, COLS> AsSqlParts for Insert<T, COLS>
+impl<T, Cols> AsSqlParts for Insert<T, Cols>
     where
         T: AsTable,
-        COLS: AsColumns
+        Cols: AsColumns
 {
     fn as_sql_parts<'a> (&self) -> Cow<'a, str> {
         if let Some(bulk_len) = self.bulk {
@@ -54,30 +54,6 @@ impl<T, COLS> AsSqlParts for Insert<T, COLS>
 
     }
 }
-
-impl<T, COLS> Filter for Insert<T, COLS>
-    where
-        T: AsTable,
-        COLS: AsColumns
-{}
-
-impl<T, COLS> Group for Insert<T, COLS>
-    where
-        T: AsTable,
-        COLS: AsColumns
-{}
-
-impl<T, COLS> Order for Insert<T, COLS>
-    where
-        T: AsTable,
-        COLS: AsColumns
-{}
-
-impl<T, COLS> LimitNumber for Insert<T, COLS>
-    where
-        T: AsTable,
-        COLS: AsColumns
-{}
 
 #[cfg(test)]
 mod insert_test {

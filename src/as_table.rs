@@ -7,19 +7,19 @@ pub trait AsTable: AsSqlParts
 {
     type AllColumns: AsColumns;
 
-    fn select<COLS: AsColumns> (self, columns: COLS) -> Select<Self, COLS> {
+    fn select<Cols: AsColumns> (self, columns: Cols) -> Select<Self, Cols> {
         Select::new(self, columns)
     }
 
-    fn insert<COLS: AsColumns> (self, columns: COLS) -> Insert<Self, COLS> {
+    fn insert<Cols: AsColumns> (self, columns: Cols) -> Insert<Self, Cols> {
         Insert::new(self, columns, None)
     }
 
-    fn bulk_insert<COLS: AsColumns> (self, columns: COLS, len: usize) -> Insert<Self, COLS> {
+    fn bulk_insert<Cols: AsColumns> (self, columns: Cols, len: usize) -> Insert<Self, Cols> {
         Insert::new(self, columns, Some(len))
     }
 
-    fn update<COLS: AsColumns> (self, columns: COLS) -> Update<Self, COLS> {
+    fn update<Cols: AsColumns> (self, columns: Cols) -> Update<Self, Cols> {
         Update::new(self, columns)
     }
 
