@@ -23,6 +23,10 @@ pub mod prelude {
 pub mod dev {
     pub use super::state::dev::*;
     pub use super::adapters::dev::*;
+
+    pub fn returning_sql<COLS: super::as_columns::AsColumns> (cols: COLS) -> String {
+        format!("RETURNING {}", cols.columns_sequence())
+    }
 }
 
 
@@ -32,7 +36,6 @@ fn multiple_placeholder(len: usize, repeat_str: &str) -> String {
         .collect::<Vec<&str>>()
         .join(", ")
 }
-
 
 #[cfg(test)]
 mod tests {
