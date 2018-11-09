@@ -231,7 +231,7 @@ impl<Col> AsSqlParts for Included<Col>
             format!("{} IN ( {} )", self.column.as_sql_parts(), multiple_placeholder(self.len, "?")).into()
         } else {
             // Useful when use function that may take length 0
-            format!("{} IN ( \"\" )", self.column.as_sql_parts()).into()
+            format!("{} IN ( '' )", self.column.as_sql_parts()).into()
         }
     }
 }
@@ -476,7 +476,7 @@ mod simple_test {
 
         // If length is 0
         let parts = Id.included(0);
-        assert_eq!(parts.as_sql_parts(), "users.id IN ( \"\" )");
+        assert_eq!(parts.as_sql_parts(), "users.id IN ( '' )");
     }
 
     #[test]
